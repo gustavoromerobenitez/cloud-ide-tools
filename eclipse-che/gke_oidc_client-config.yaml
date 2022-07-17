@@ -1,0 +1,19 @@
+apiVersion: authentication.gke.io/v2alpha1
+kind: ClientConfig
+metadata:
+  name: default
+  namespace: kube-public
+spec:
+  name: eclipse-che
+  server: https://192.168.0.1:6443
+  authentication:
+  - name: oidc
+    oidc:
+      clientID: ***.apps.googleusercontent.com
+      clientSecret: ****
+      extraParams: prompt=consent
+      issuerURI: https://accounts.google.com
+      cloudConsoleRedirectURI: https://console.cloud.google.com/kubernetes/oidc
+      kubectlRedirectURI: https://grbgcp.co.uk/__/auth/handler
+      scopes: openid, email
+      userClaim: email
