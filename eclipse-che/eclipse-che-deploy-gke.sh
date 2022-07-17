@@ -1,10 +1,20 @@
 #!/bin/bash
 
+#
+# WIP - Wait loops are missing and the OIDC Hack is not ready yet. 
+#  Requires additoinal Che server properties and a new Dashboard or Operator image
+#   https://github.com/eclipse/che/issues/21394#issuecomment-1155229431
+#   https://github.com/eclipse/che/issues/21049#issuecomment-1067776895
+#
+
+# Environment ser-up
 gcloud config set project grb-che-1
 gcloud config set compute/zone europe-west2-a
 gcloud config set compute/region europe-west2
 
 # Create a GKE cluster with the Identity and Workload Identity services enabled
+# It requires quite some CPU, hence the n1-standard-8 machine
+# I'm not interested in fault-tolerance, hence the 1 node cluster
 gcloud container clusters create eclipse-che --zone europe-west2-a --enable-identity-service \
   --workload-pool=grb-che-1.svc.id.goog --project "grb-che-1" --release-channel "rapid" \
   --machine-type "n1-standard-8" --image-type "COS_CONTAINERD" --disk-type "pd-standard" \
@@ -34,7 +44,7 @@ apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
   name: che-certificate-issuer
-  namespace: cert-manager
+  namespace: eclipse-che
 spec:
   acme:
     solvers:
@@ -70,10 +80,12 @@ EOF
 kubectl apply \
   -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.2.1/deploy/static/provider/cloud/deploy.yaml
 
-# TODO Wait for the container to run
+# TODO - Wait loop
+# Wait for the container to run
 kubectl get pods --namespace ingress-nginx
 
-# TODO Wait for the external IP
+# TODO - Wait loop
+# Wait for the external IP
 kubectl get services  --namespace ingress-nginx
 
 # Get the external IP
@@ -83,11 +95,12 @@ kubectl get services --namespace ingress-nginx \
 # Install chectl
 bash <(curl -sL  https://www.eclipse.org/che/chectl/)
 
-# TODO Wait for the certificate to be ready
+# TODO - Wait loop
+# Wait for the certificate to be ready
 kubectl describe certificate/che-tls -n eclipse-che
 
 # Configure GKE external OIDC
 kubectl apply -f gke_oidc_client-config.yaml
 
-# Install Che using chectl
+# Install Che on GKE using chectl
 chectl server:deploy --platform=k8s --domain=grbgcp.co.uk --skip-oidc-provider-check
