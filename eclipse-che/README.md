@@ -43,6 +43,11 @@ gcloud services enable compute.googleapis.com
 gcloud services enable container.googleapis.com
 ```
 
+## Configure OAuth Consent Page and Oauth Credentials
+
+[Consent Page](https://console.cloud.google.com/apis/credentials/consent)
+[Credentials](https://console.cloud.google.com/apis/credentials)
+
 ## Domain Registrar Setup
 
 * Create a domain to use with Che, i.e.: Google Domains, Names.co.uk
