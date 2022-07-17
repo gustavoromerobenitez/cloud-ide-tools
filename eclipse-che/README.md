@@ -1,4 +1,30 @@
-# Eclipse Che Setup on GCP
+# Eclipse Che
+
+# Setup on Minikube
+
+* Install the latest Minikube on Ubuntu:
+
+```
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
+```
+
+* chectl requires minikube to run using the [Docker Driver in Rootless Mode](https://minikube.sigs.k8s.io/docs/drivers/docker/)
+   
+* Once minikube is running, to access the applications, the entry:
+   `127.0.0.1 192.168.x.x.nip.io dex.192.168.x.x.nip.io` 
+   is required in /etc/hosts.
+   
+* It is also necessary to run `minikube tunnel` and provide sudo password interactively
+  in order for minikube to be able to route requests from ports lower than 1024 (uses 80 and 443)
+  
+* To deploy eclipse-che (stable) on Minikube in Ubuntu, run the following script:
+   [eclipse-che-minikube.sh](./eclipse-che-minikube.sh)
+   
+* **IMPORTANT** Currently there are OIDC issues in Minikube **1.26** that prevent Eclipse from working with an OIDC provider. 
+   * I tried setting up the Google provider and got an error saying that the provider wass behaving oddly...
+
+# Setup on GCP
 
 These are instructions dated 2022-07 on how to set up Eclipse Che (stable) on GCP.
 
