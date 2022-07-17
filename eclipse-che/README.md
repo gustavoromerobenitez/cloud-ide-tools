@@ -1,6 +1,6 @@
 # Eclipse Che Setup on GCP
 
-These are instructions date 2022-07 on how to set up Eclipse Che (stable) on GCP.
+These are instructions dated 2022-07 on how to set up Eclipse Che (stable) on GCP.
 
 ## Create a GCP project
 
